@@ -1,0 +1,50 @@
+services:
+  nginxproxy:
+    container_name: nginxproxy
+    restart: unless-stopped
+    image: nginxproxy/nginx-proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./vhost:/etc/nginx/vhost.d
+      - ./certs:/etc/nginx/certs
+      - ./html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  acme-companion:
+    depends_on:
+      - nginxproxy
+    container_name: acme-companion
+    restart: unless-stopped
+    image: nginxproxy/acme-companion
+    environment:
+      - DEFAULT_EMAIL=${EMAIL}
+      - NGINX_PROXY_CONTAINER=nginxproxy
+    volumes:
+      - ./vhost:/etc/nginx/vhost.d
+      - ./certs:/etc/nginx/certs
+      - ./html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./acme:/etc/acme.sh
+  personal_website:
+    depends_on:
+      - acme-companion
+    container_name: personal_website
+    restart: unless-stopped
+    image: httpd
+    expose:
+      - 80
+    environment:
+      - VIRTUAL_HOST=${PERSONAL_WEB_SITE_DOMAIN}
+      - LETSENCRYPT_HOST=${PERSONAL_WEB_SITE_DOMAIN}
+  api_website:
+    depends_on:
+      - acme-companion
+    container_name: api_website
+    restart: unless-stopped
+    image: nginx:alpine
+    expose:
+      - 80
+    environment:
+      - VIRTUAL_HOST=${API_WEB_SITE_DOMAIN}
+      - LETSENCRYPT_HOST=${API_WEB_SITE_DOMAIN}
