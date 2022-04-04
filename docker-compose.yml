@@ -26,25 +26,25 @@ services:
       - ./html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./acme:/etc/acme.sh
-  personal_website:
+  httpd_website:
     depends_on:
       - acme-companion
-    container_name: personal_website
+    container_name: httpd_website
     restart: unless-stopped
     image: httpd
     expose:
       - 80
     environment:
-      - VIRTUAL_HOST=${PERSONAL_WEB_SITE_DOMAIN}
-      - LETSENCRYPT_HOST=${PERSONAL_WEB_SITE_DOMAIN}
-  api_website:
+      - VIRTUAL_HOST=${SITE2_DOMAIN}
+      - LETSENCRYPT_HOST=${SITE2_DOMAIN}
+  nginx_website:
     depends_on:
       - acme-companion
-    container_name: api_website
+    container_name: nginx_website
     restart: unless-stopped
     image: nginx:alpine
     expose:
       - 80
     environment:
-      - VIRTUAL_HOST=${API_WEB_SITE_DOMAIN}
-      - LETSENCRYPT_HOST=${API_WEB_SITE_DOMAIN}
+      - VIRTUAL_HOST=${SITE1_DOMAIN}
+      - LETSENCRYPT_HOST=${SITE1_DOMAIN}
