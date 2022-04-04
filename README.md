@@ -13,15 +13,15 @@ docker-compose up
 
 ### Website 1 using `httpd` image
 
-![website1](https://user-images.githubusercontent.com/5656640/155907472-6564ebea-809e-485a-9c46-b0e434c1bda1.PNG)
+![httpd](https://user-images.githubusercontent.com/5656640/161645741-a38ce402-b695-41ca-bc56-7e48b5226f8d.PNG)
+
   
     
 
 ### Website 2 using `nginx` image
-![website2](https://user-images.githubusercontent.com/5656640/155907522-f67f26b3-143a-484e-a712-76da8efa5883.PNG)
 
-  
-  
+![nginx](https://user-images.githubusercontent.com/5656640/161645754-ee507d34-26c2-4400-817b-37d0f7197d85.PNG)
+
     
 To add another container and serve it from another virtual host:
  
